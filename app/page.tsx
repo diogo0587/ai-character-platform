@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 
-export default function Home() {
+export default function Home(){
 
 const [message,setMessage] = useState("")
 const [messages,setMessages] = useState([])
@@ -11,29 +11,41 @@ async function send(){
 
 if(!message) return
 
+try{
+
 const res = await fetch("/api/chat",{
 method:"POST",
 headers:{ "Content-Type":"application/json" },
 body:JSON.stringify({
 character:{
 name:"Luna",
-personality:"curiosa, divertida, hacker futurista",
-scenario:"um laboratório de inteligência artificial"
+personality:"curiosa hacker futurista",
+scenario:"laboratório de IA"
 },
 history:"",
-message
+message:message
 })
 })
 
 const data = await res.json()
 
-setMessages([
-...messages,
+setMessages(prev => [
+...prev,
 {role:"user",text:message},
-{role:"ai",text:data.reply}
+{role:"ai",text:data.reply || "Sem resposta da IA"}
 ])
 
 setMessage("")
+
+}catch(e){
+
+setMessages(prev => [
+...prev,
+{role:"ai",text:"Erro ao conectar com a IA"}
+])
+
+}
+
 }
 
 return (
@@ -46,21 +58,21 @@ return (
 <div style={{marginBottom:20}}>
 {messages.map((m,i)=>(
 <p key={i}>
-<b>{m.role==="user" ? "Você" : "Luna"}:</b> {m.text}
+<b>{m.role === "user" ? "Você" : "Luna"}:</b> {m.text}
 </p>
 ))}
 </div>
 
 <input
 value={message}
-onChange={e=>setMessage(e.target.value)}
+onChange={(e)=>setMessage(e.target.value)}
 placeholder="Digite uma mensagem..."
 style={{padding:10,width:"70%"}}
 />
 
 <button
 onClick={send}
-style={{padding:10,marginLeft:10}}
+style={{padding:10,marginLeft:10,cursor:"pointer"}}
 >
 Enviar
 </button>
