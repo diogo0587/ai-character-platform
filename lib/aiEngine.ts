@@ -1,7 +1,7 @@
 export async function callAI(prompt){
 
 const response = await fetch(
-"https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct",
+"https://router.huggingface.co/hf-inference/models/NousResearch/Hermes-2-Pro-Llama-3-8B",
 {
 method:"POST",
 headers:{
@@ -11,8 +11,10 @@ headers:{
 body:JSON.stringify({
 inputs:prompt,
 parameters:{
-max_new_tokens:200,
-temperature:0.9
+max_new_tokens:300,
+temperature:0.95,
+top_p:0.9,
+repetition_penalty:1.1
 }
 })
 })
