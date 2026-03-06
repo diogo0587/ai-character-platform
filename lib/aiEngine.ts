@@ -1,7 +1,7 @@
 export async function callAI(prompt){
 
 const response = await fetch(
-"https://router.huggingface.co/hf-inference/models/NousResearch/Hermes-2-Pro-Llama-3-8B",
+"https://router.huggingface.co/hf-inference/models/HuggingFaceH4/zephyr-7b-beta",
 {
 method:"POST",
 headers:{
