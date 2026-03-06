@@ -1,5 +1,5 @@
 import { buildPrompt } from "../../../lib/promptBuilder"
-import { callAI } from "../../../lib/aiEngine""
+import { callAI } from "../../../lib/aiEngine"
 
 export async function POST(req){
 
