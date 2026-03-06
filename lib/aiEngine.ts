@@ -5,21 +5,23 @@ const response = await fetch(
 {
 method:"POST",
 headers:{
-"Authorization": `Bearer ${process.env.HF_TOKEN}`,
+Authorization: `Bearer ${process.env.HF_TOKEN}`,
 "Content-Type":"application/json"
 },
 body:JSON.stringify({
-inputs:prompt,
+inputs: prompt,
 parameters:{
-max_new_tokens:300,
-temperature:0.95,
-top_p:0.9,
-repetition_penalty:1.1
+max_new_tokens:200,
+temperature:0.9
 }
 })
 })
 
-const data = await response.json()
+const text = await response.text()
+
+try{
+
+const data = JSON.parse(text)
 
 if(Array.isArray(data)){
 return data[0].generated_text
@@ -30,5 +32,11 @@ return "Erro da IA: " + data.error
 }
 
 return JSON.stringify(data)
+
+}catch{
+
+return "Erro da API: " + text
+
+}
 
 }
