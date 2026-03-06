@@ -3,45 +3,41 @@ export async function callAI(prompt){
 try{
 
 const response = await fetch(
-"https://router.huggingface.co/hf-inference/models/mistralai/Mistral-7B-Instruct-v0.2",
+"https://openrouter.ai/api/v1/chat/completions",
 {
 method:"POST",
 headers:{
-"Authorization": `Bearer ${process.env.HF_TOKEN}`,
+"Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
 "Content-Type":"application/json"
 },
 body:JSON.stringify({
-inputs: prompt,
-parameters:{
-max_new_tokens:200,
-temperature:0.9
+model:"mistralai/mistral-7b-instruct",
+messages:[
+{
+role:"user",
+content:prompt
 }
+],
+temperature:0.9,
+max_tokens:200
 })
 })
 
-const text = await response.text()
+const data = await response.json()
 
-let data
-
-try{
-data = JSON.parse(text)
-}catch{
-return "Erro da API: " + text
-}
-
-if(Array.isArray(data)){
-return data[0].generated_text
+if(data.choices && data.choices[0]){
+return data.choices[0].message.content
 }
 
 if(data.error){
-return "Erro IA: " + data.error
+return "Erro IA: " + data.error.message
 }
 
 return JSON.stringify(data)
 
 }catch(e){
 
-return "Erro de conexão com IA"
+return "Erro ao conectar com OpenRouter"
 
 }
 
