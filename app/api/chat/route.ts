@@ -1,4 +1,5 @@
 import { buildPrompt } from "@/lib/promptBuilder"
+import { callAI } from "@/lib/aiEngine"
 
 export async function POST(req){
 
@@ -10,8 +11,10 @@ body.history,
 body.message
 )
 
+const reply = await callAI(prompt)
+
 return Response.json({
-reply:"(resposta simulada da IA por enquanto)"
+reply
 })
 
 }
